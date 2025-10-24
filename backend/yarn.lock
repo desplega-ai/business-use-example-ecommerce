@@ -1203,10 +1203,10 @@
     enabled "2.0.x"
     kuler "^2.0.0"
 
-"@desplega.ai/business-use@^0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@desplega.ai/business-use/-/business-use-0.4.1.tgz#0d3ece66a607060638c2348299601d7ba35c8582"
-  integrity sha512-c4rihVI45vDpDyi8ITNpkr4bWpmj5PE3ft2Ci7HleJNiD6QygkoAxlKU1TO5A2CcoG1Ly46a1+NU87TamH4leA==
+"@desplega.ai/business-use@^0.4.2":
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/@desplega.ai/business-use/-/business-use-0.4.2.tgz#fc9c6ead44a7382e4756bfb0a5e784e4b83f0a3d"
+  integrity sha512-Rd/H/EzfKjylxaKwJulhoclfK9q0QFg8HjHrLrAVNY3YGlEaDzSFDR2uDjynDy+MLl7jxr/e+xzUNTR87tr0EA==
   dependencies:
     zod "^3.24.1"
 
