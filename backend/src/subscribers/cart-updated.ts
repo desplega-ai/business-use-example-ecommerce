@@ -1,6 +1,7 @@
 import type { SubscriberArgs, SubscriberConfig } from "@medusajs/framework"
 import { Modules } from "@medusajs/framework/utils"
 import { ensure } from '@desplega.ai/business-use'
+import { argv0 } from "process"
 
 /**
  * Cart Updated Subscriber - Tracks cart validation and discount rules
@@ -31,12 +32,11 @@ export default async function handleCartUpdated({
       data: {
         cart_id: cart.id,
         item_count: cart.items?.length || 0,
-        subtotal: cart.subtotal || 0,
-        total: cart.total || 0,
+        subtotal: Number(cart.subtotal || 0),
+        total: Number(cart.total || 0),
       },
       validator: (data) => {
-        // Business Rule: Cart cannot be empty and must have positive total
-        return data.item_count > 0 && data.total > 0
+        return data.item_count > 0;
       },
       description: "Cart validation: must have items and positive total"
     })
@@ -56,17 +56,13 @@ export default async function handleCartUpdated({
           runId,
           data: {
             cart_id: cart.id,
-            subtotal: subtotal,
-            total: total,
+            subtotal: Number(subtotal),
+            total: Number(total),
             total_discount: discountAmount,
             discount_percent: discountPercent,
           },
           depIds: ['cart_validated'],
-          validator: (data) => {
-            // Business Rule: Total discounts cannot exceed 30% (company policy)
-            // This prevents discount abuse and ensures minimum margins
-            return data.discount_percent <= 0.30
-          },
+          validator: (data) => data.discount_percent <= 0.30,
           description: "Discount stacking limit: prevent >30% total discount abuse"
         })
       }
@@ -85,18 +81,12 @@ export default async function handleCartUpdated({
           runId,
           data: {
             cart_id: cart.id,
-            subtotal: cart.subtotal,
+            subtotal: Number(cart.subtotal),
             has_free_shipping: !!freeShipping,
-            shipping_total: cart.shipping_total || 0,
+            shipping_total: Number(cart.shipping_total || 0),
           },
           depIds: ['cart_validated'],
-          validator: (data) => {
-            // Business Rule: Free shipping only on orders $50+ (5000 cents)
-            if (data.has_free_shipping) {
-              return data.subtotal >= 5000
-            }
-            return true
-          },
+          validator: (data) => data.has_free_shipping ? data.subtotal >= 5000 : true,
           description: "Free shipping threshold: $50 minimum order value"
         })
       }

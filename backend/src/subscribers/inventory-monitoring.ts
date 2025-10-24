@@ -45,10 +45,7 @@ export default async function handleInventoryUpdate({
         total_stock: totalStock,
         is_available: totalStock > 0,
       },
-      validator: (data) => {
-        // Business Rule: Stock level must be non-negative
-        return data.total_stock >= 0
-      },
+      validator: (data) => data.total_stock >= 0,
       description: "Stock level validation: ensure non-negative inventory"
     })
 
@@ -67,10 +64,7 @@ export default async function handleInventoryUpdate({
           threshold: lowStockThreshold,
           is_low_stock: isLowStock,
         },
-        validator: (data) => {
-          // Business Rule: Alert when stock below 20% of reorder point
-          return data.current_stock <= data.threshold
-        },
+        validator: (data) => data.current_stock <= data.threshold,
         description: `Low stock alert: reordering needed`
       })
 
@@ -89,10 +83,7 @@ export default async function handleInventoryUpdate({
           reorder_quantity: reorderQuantity,
         },
         depIds: ['low_stock_alert'],
-        validator: (data) => {
-          // Business Rule: Reorder quantity must cover 3 months of avg sales
-          return data.reorder_quantity >= data.avg_monthly_sales * 3
-        },
+        validator: (data) => data.reorder_quantity >= data.avg_monthly_sales * 3,
         description: "Reorder calculation: 3 months supply based on sales history"
       })
 

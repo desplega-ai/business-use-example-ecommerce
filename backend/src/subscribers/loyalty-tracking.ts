@@ -51,11 +51,7 @@ export default async function handleLoyaltyTracking({
         should_be_vip: shouldBeVip,
         order_total: order.total,
       },
-      validator: (data) => {
-        // Business Rule: VIP status at $1000 spent OR 5+ orders
-        const expectedVip = data.lifetime_spent >= 100000 || data.order_count >= 5
-        return expectedVip === data.should_be_vip
-      },
+      validator: (data) => (data.lifetime_spent >= 100000 || data.order_count >= 5) === data.should_be_vip,
       description: "VIP status: granted at $1000 lifetime spend or 5 orders"
     })
 
@@ -71,18 +67,14 @@ export default async function handleLoyaltyTracking({
       data: {
         order_id: order.id,
         customer_id: customer.id,
-        order_total: order.total,
+        order_total: Number(order.total),
         base_points: basePoints,
         multiplier: multiplier,
         earned_points: earnedPoints,
         is_vip: shouldBeVip,
       },
       depIds: ['vip_status_check'],
-      validator: (data) => {
-        // Business Rule: 1 point per dollar, 2x for VIP
-        const expected = Math.floor(data.order_total / 100) * data.multiplier
-        return data.earned_points === expected
-      },
+      validator: (data) => (Math.floor(data.order_total / 100) * data.multiplier) === data.earned_points,
       description: "Loyalty points: 1 point/dollar (2x for VIP)"
     })
 

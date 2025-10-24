@@ -1,6 +1,6 @@
 {
   "name": "backend",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A starter for Medusa projects.",
   "author": "Medusa (https://medusajs.com)",
   "license": "MIT",
@@ -22,7 +22,7 @@
     "test:unit": "TEST_TYPE=unit NODE_OPTIONS=--experimental-vm-modules jest --silent --runInBand --forceExit"
   },
   "dependencies": {
-    "@desplega.ai/business-use": "^0.4.1",
+    "@desplega.ai/business-use": "^0.4.2",
     "@medusajs/admin-sdk": "2.11.0",
     "@medusajs/cli": "2.11.0",
     "@medusajs/framework": "2.11.0",
