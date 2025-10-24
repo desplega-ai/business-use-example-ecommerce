@@ -1,0 +1,24 @@
+{
+  "name": "business-use-ecommerce",
+  "version": "1.0.0",
+  "description": "Medusa.js E-commerce Store with Business-Use Flow Tracking",
+  "private": true,
+  "scripts": {
+    "start": "pm2 start ecosystem.config.js",
+    "stop": "pm2 stop ecosystem.config.js",
+    "restart": "pm2 restart ecosystem.config.js",
+    "delete": "pm2 delete ecosystem.config.js",
+    "logs": "pm2 logs",
+    "logs:business-use": "pm2 logs business-use",
+    "logs:medusa": "pm2 logs medusa-backend",
+    "logs:storefront": "pm2 logs storefront",
+    "status": "pm2 status",
+    "monit": "pm2 monit",
+    "setup": "cd backend && yarn install && cd ../storefront && yarn install",
+    "migrate": "cd backend && npx medusa db:migrate",
+    "seed": "cd backend && npx medusa exec ./src/scripts/seed.ts"
+  },
+  "devDependencies": {
+    "pm2": "^6.0.13"
+  }
+}

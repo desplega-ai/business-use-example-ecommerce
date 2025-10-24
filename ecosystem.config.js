@@ -1,0 +1,50 @@
+module.exports = {
+  apps: [
+    {
+      name: 'business-use',
+      script: 'uvx',
+      args: 'business-use-core server dev --port 13371',
+      cwd: './',
+      watch: false,
+      autorestart: true,
+      max_restarts: 10,
+      env: {
+        NODE_ENV: 'development',
+      },
+      error_file: './logs/business-use-error.log',
+      out_file: './logs/business-use-out.log',
+      log_date_format: 'YYYY-MM-DD HH:mm:ss Z',
+    },
+    {
+      name: 'medusa-backend',
+      script: 'npm',
+      args: 'run dev',
+      cwd: './backend',
+      watch: false,
+      autorestart: true,
+      max_restarts: 10,
+      env: {
+        NODE_ENV: 'development',
+      },
+      error_file: './logs/medusa-error.log',
+      out_file: './logs/medusa-out.log',
+      log_date_format: 'YYYY-MM-DD HH:mm:ss Z',
+    },
+    {
+      name: 'storefront',
+      script: 'npm',
+      args: 'run dev',
+      cwd: './storefront',
+      watch: false,
+      autorestart: true,
+      max_restarts: 10,
+      env: {
+        NODE_ENV: 'development',
+        PORT: '8000',
+      },
+      error_file: './logs/storefront-error.log',
+      out_file: './logs/storefront-out.log',
+      log_date_format: 'YYYY-MM-DD HH:mm:ss Z',
+    },
+  ],
+};
