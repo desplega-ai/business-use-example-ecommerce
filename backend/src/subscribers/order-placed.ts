@@ -24,10 +24,10 @@ export default async function handleOrderPlaced({
       relations: ["items", "shipping_address"]
     })
 
-    // Use cart_id for runId to continue the checkout flow started in cart-updated
-    // This ensures all checkout nodes are in the same flow run
-    // Note: cart_id is a field on the order, not a relation
-    const runId = order.cart_id ? `cart_${order.cart_id}` : BusinessUseHelpers.getOrderRunId(order.id)
+    // In Medusa v2, there's no direct cart_id on the order
+    // We'll use the order ID for the runId since we can't link back to the cart
+    // Note: This means cart and order nodes will be in separate flow runs
+    const runId = BusinessUseHelpers.getOrderRunId(order.id)
 
     // BUSINESS RULE #4: Tax calculation for orders
     const taxTotal = order.tax_total || 0
@@ -43,8 +43,7 @@ export default async function handleOrderPlaced({
         subtotal: Number(subtotal),
         has_tax: Number(taxTotal) > 0,
       },
-      // Tax calculation depends on cart validation from cart-updated subscriber
-      depIds: ['cart_validated'],
+      // No dependencies - order flow is independent since cart_id not available
       validator: (data) => data.tax_total >= 0,
       description: "Tax calculation: tax must be calculated correctly"
     })
@@ -84,8 +83,7 @@ export default async function handleOrderPlaced({
             ordered_quantity: item.quantity,
             variant_id: item.variant_id,
           },
-          // Inventory should be reserved after cart validation
-          depIds: ['cart_validated'],
+          // No dependencies - order flow is independent
           // Business Rule: Cannot oversell inventory
           // In this implementation, we trust Medusa's inventory management
           // but we track the reservation for Business-Use monitoring
@@ -124,8 +122,7 @@ export default async function handleOrderPlaced({
         is_first_order: isFirstOrder,
         total_orders: totalOrders,
       },
-      // First order check happens after cart validation
-      depIds: ['cart_validated'],
+      // No dependencies - order flow is independent
       // Business Rule: Track if this is truly a first order
       // This can be used to validate first-order-only discounts
       description: "Customer order history info"
